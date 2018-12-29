@@ -1,0 +1,38 @@
+---
+apiVersion: gs.io/v1alpha1
+kind: CronHPA
+metadata:
+  name: example-cron-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: demo-deployment
+  crons:
+    - schedule: "*/2 * * * *"
+      targetReplicas: 3
+    - schedule: "*/3 * * * *"
+      targetReplicas: 6
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: demo-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
