@@ -12,7 +12,7 @@ metadata:
   name: example-cron-hpa
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: demo-deployment
   crons:

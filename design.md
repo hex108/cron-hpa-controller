@@ -48,7 +48,7 @@ metadata:
   name: example-cron-hpa
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: demo-deployment
   crons:
@@ -71,7 +71,7 @@ metadata:
   name: game-servers-cronhpa
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: game-servers
   crons:
@@ -92,7 +92,7 @@ metadata:
   name: web-servers-cronhpa
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: web-servers
   crons:
