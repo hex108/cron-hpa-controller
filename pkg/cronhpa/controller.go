@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/hex108/cron-hpa-controller/pkg/apis/cronhpacontroller/v1alpha1"
+	"github.com/hex108/cron-hpa-controller/pkg/apis/cronhpacontroller/v1"
 	clientset "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned"
 	cronhpascheme "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/scheme"
 
@@ -122,7 +122,7 @@ func (c *Controller) GetEventRecorder() record.EventRecorder {
 
 func (c *Controller) syncAll() {
 	klog.V(4).Infof("Starting sync all")
-	cronhpas, err := c.cronhpaclientset.CronhpacontrollerV1alpha1().CronHPAs(metav1.NamespaceAll).List(metav1.ListOptions{})
+	cronhpas, err := c.cronhpaclientset.CronhpacontrollerV1().CronHPAs(metav1.NamespaceAll).List(metav1.ListOptions{})
 	if err != nil {
 		klog.Errorf("Failed to list cronhpas")
 		return
@@ -133,7 +133,7 @@ func (c *Controller) syncAll() {
 	}
 }
 
-func (c *Controller) syncOne(cronhpa *v1alpha1.CronHPA) {
+func (c *Controller) syncOne(cronhpa *v1.CronHPA) {
 	now := time.Now()
 	latestSchedledTime := getLatestScheduledTime(cronhpa)
 	for _, cron := range cronhpa.Spec.Crons {
@@ -153,7 +153,7 @@ func (c *Controller) syncOne(cronhpa *v1alpha1.CronHPA) {
 			}
 			// Update status
 			cronhpa.Status.LastScheduleTime = &metav1.Time{Time: time.Now()}
-			if _, err := c.cronhpaclientset.CronhpacontrollerV1alpha1().CronHPAs(cronhpa.Namespace).Update(cronhpa); err != nil {
+			if _, err := c.cronhpaclientset.CronhpacontrollerV1().CronHPAs(cronhpa.Namespace).Update(cronhpa); err != nil {
 				klog.Errorf("Failed to update cronhpa %s's LastScheduleTime(%+v): %v",
 					getCronHPAFullName(cronhpa), cronhpa.Status.LastScheduleTime.Time, err)
 			}
@@ -163,7 +163,7 @@ func (c *Controller) syncOne(cronhpa *v1alpha1.CronHPA) {
 	}
 }
 
-func (c *Controller) scale(cronhpa *v1alpha1.CronHPA, replicas int32) error {
+func (c *Controller) scale(cronhpa *v1.CronHPA, replicas int32) error {
 	reference := fmt.Sprintf("%s/%s/%s", cronhpa.Spec.ScaleTargetRef.Kind, cronhpa.Namespace, cronhpa.Spec.ScaleTargetRef.Name)
 
 	targetGV, err := schema.ParseGroupVersion(cronhpa.Spec.ScaleTargetRef.APIVersion)
@@ -236,7 +236,7 @@ func (c *Controller) scaleForResourceMappings(namespace, name string, mappings [
 	return nil, schema.GroupResource{}, firstErr
 }
 
-func getLatestScheduledTime(cronhpa *v1alpha1.CronHPA) time.Time {
+func getLatestScheduledTime(cronhpa *v1.CronHPA) time.Time {
 	if cronhpa.Status.LastScheduleTime != nil {
 		return cronhpa.Status.LastScheduleTime.Time
 	} else {
@@ -244,6 +244,6 @@ func getLatestScheduledTime(cronhpa *v1alpha1.CronHPA) time.Time {
 	}
 }
 
-func getCronHPAFullName(cronhpa *v1alpha1.CronHPA) string {
+func getCronHPAFullName(cronhpa *v1.CronHPA) string {
 	return cronhpa.Namespace + "/" + cronhpa.Name
 }

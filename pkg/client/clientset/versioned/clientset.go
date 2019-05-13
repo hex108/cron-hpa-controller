@@ -19,7 +19,7 @@ limitations under the License.
 package versioned
 
 import (
-	cronhpacontrollerv1alpha1 "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/typed/cronhpacontroller/v1alpha1"
+	cronhpacontrollerv1 "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/typed/cronhpacontroller/v1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -27,27 +27,19 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	CronhpacontrollerV1alpha1() cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Interface
-	// Deprecated: please explicitly pick a version if possible.
-	Cronhpacontroller() cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Interface
+	CronhpacontrollerV1() cronhpacontrollerv1.CronhpacontrollerV1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	cronhpacontrollerV1alpha1 *cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Client
+	cronhpacontrollerV1 *cronhpacontrollerv1.CronhpacontrollerV1Client
 }
 
-// CronhpacontrollerV1alpha1 retrieves the CronhpacontrollerV1alpha1Client
-func (c *Clientset) CronhpacontrollerV1alpha1() cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Interface {
-	return c.cronhpacontrollerV1alpha1
-}
-
-// Deprecated: Cronhpacontroller retrieves the default version of CronhpacontrollerClient.
-// Please explicitly pick a version.
-func (c *Clientset) Cronhpacontroller() cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Interface {
-	return c.cronhpacontrollerV1alpha1
+// CronhpacontrollerV1 retrieves the CronhpacontrollerV1Client
+func (c *Clientset) CronhpacontrollerV1() cronhpacontrollerv1.CronhpacontrollerV1Interface {
+	return c.cronhpacontrollerV1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -66,7 +58,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.cronhpacontrollerV1alpha1, err = cronhpacontrollerv1alpha1.NewForConfig(&configShallowCopy)
+	cs.cronhpacontrollerV1, err = cronhpacontrollerv1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +74,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.cronhpacontrollerV1alpha1 = cronhpacontrollerv1alpha1.NewForConfigOrDie(c)
+	cs.cronhpacontrollerV1 = cronhpacontrollerv1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -91,7 +83,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.cronhpacontrollerV1alpha1 = cronhpacontrollerv1alpha1.New(c)
+	cs.cronhpacontrollerV1 = cronhpacontrollerv1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

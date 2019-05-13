@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned"
-	cronhpacontrollerv1alpha1 "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/typed/cronhpacontroller/v1alpha1"
-	fakecronhpacontrollerv1alpha1 "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/typed/cronhpacontroller/v1alpha1/fake"
+	cronhpacontrollerv1 "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/typed/cronhpacontroller/v1"
+	fakecronhpacontrollerv1 "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned/typed/cronhpacontroller/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -71,12 +71,7 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// CronhpacontrollerV1alpha1 retrieves the CronhpacontrollerV1alpha1Client
-func (c *Clientset) CronhpacontrollerV1alpha1() cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Interface {
-	return &fakecronhpacontrollerv1alpha1.FakeCronhpacontrollerV1alpha1{Fake: &c.Fake}
-}
-
-// Cronhpacontroller retrieves the CronhpacontrollerV1alpha1Client
-func (c *Clientset) Cronhpacontroller() cronhpacontrollerv1alpha1.CronhpacontrollerV1alpha1Interface {
-	return &fakecronhpacontrollerv1alpha1.FakeCronhpacontrollerV1alpha1{Fake: &c.Fake}
+// CronhpacontrollerV1 retrieves the CronhpacontrollerV1Client
+func (c *Clientset) CronhpacontrollerV1() cronhpacontrollerv1.CronhpacontrollerV1Interface {
+	return &fakecronhpacontrollerv1.FakeCronhpacontrollerV1{Fake: &c.Fake}
 }

@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	v1alpha1 "github.com/hex108/cron-hpa-controller/pkg/apis/cronhpacontroller/v1alpha1"
+	cronhpacontrollerv1 "github.com/hex108/cron-hpa-controller/pkg/apis/cronhpacontroller/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -30,29 +30,29 @@ import (
 
 // FakeCronHPAs implements CronHPAInterface
 type FakeCronHPAs struct {
-	Fake *FakeCronhpacontrollerV1alpha1
+	Fake *FakeCronhpacontrollerV1
 	ns   string
 }
 
-var cronhpasResource = schema.GroupVersionResource{Group: "cronhpacontroller.gs.io", Version: "v1alpha1", Resource: "cronhpas"}
+var cronhpasResource = schema.GroupVersionResource{Group: "cronhpacontroller.gs.io", Version: "v1", Resource: "cronhpas"}
 
-var cronhpasKind = schema.GroupVersionKind{Group: "cronhpacontroller.gs.io", Version: "v1alpha1", Kind: "CronHPA"}
+var cronhpasKind = schema.GroupVersionKind{Group: "cronhpacontroller.gs.io", Version: "v1", Kind: "CronHPA"}
 
 // Get takes name of the cronHPA, and returns the corresponding cronHPA object, and an error if there is any.
-func (c *FakeCronHPAs) Get(name string, options v1.GetOptions) (result *v1alpha1.CronHPA, err error) {
+func (c *FakeCronHPAs) Get(name string, options v1.GetOptions) (result *cronhpacontrollerv1.CronHPA, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(cronhpasResource, c.ns, name), &v1alpha1.CronHPA{})
+		Invokes(testing.NewGetAction(cronhpasResource, c.ns, name), &cronhpacontrollerv1.CronHPA{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.CronHPA), err
+	return obj.(*cronhpacontrollerv1.CronHPA), err
 }
 
 // List takes label and field selectors, and returns the list of CronHPAs that match those selectors.
-func (c *FakeCronHPAs) List(opts v1.ListOptions) (result *v1alpha1.CronHPAList, err error) {
+func (c *FakeCronHPAs) List(opts v1.ListOptions) (result *cronhpacontrollerv1.CronHPAList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewListAction(cronhpasResource, cronhpasKind, c.ns, opts), &v1alpha1.CronHPAList{})
+		Invokes(testing.NewListAction(cronhpasResource, cronhpasKind, c.ns, opts), &cronhpacontrollerv1.CronHPAList{})
 
 	if obj == nil {
 		return nil, err
@@ -62,8 +62,8 @@ func (c *FakeCronHPAs) List(opts v1.ListOptions) (result *v1alpha1.CronHPAList, 
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &v1alpha1.CronHPAList{ListMeta: obj.(*v1alpha1.CronHPAList).ListMeta}
-	for _, item := range obj.(*v1alpha1.CronHPAList).Items {
+	list := &cronhpacontrollerv1.CronHPAList{ListMeta: obj.(*cronhpacontrollerv1.CronHPAList).ListMeta}
+	for _, item := range obj.(*cronhpacontrollerv1.CronHPAList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)
 		}
@@ -79,31 +79,31 @@ func (c *FakeCronHPAs) Watch(opts v1.ListOptions) (watch.Interface, error) {
 }
 
 // Create takes the representation of a cronHPA and creates it.  Returns the server's representation of the cronHPA, and an error, if there is any.
-func (c *FakeCronHPAs) Create(cronHPA *v1alpha1.CronHPA) (result *v1alpha1.CronHPA, err error) {
+func (c *FakeCronHPAs) Create(cronHPA *cronhpacontrollerv1.CronHPA) (result *cronhpacontrollerv1.CronHPA, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(cronhpasResource, c.ns, cronHPA), &v1alpha1.CronHPA{})
+		Invokes(testing.NewCreateAction(cronhpasResource, c.ns, cronHPA), &cronhpacontrollerv1.CronHPA{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.CronHPA), err
+	return obj.(*cronhpacontrollerv1.CronHPA), err
 }
 
 // Update takes the representation of a cronHPA and updates it. Returns the server's representation of the cronHPA, and an error, if there is any.
-func (c *FakeCronHPAs) Update(cronHPA *v1alpha1.CronHPA) (result *v1alpha1.CronHPA, err error) {
+func (c *FakeCronHPAs) Update(cronHPA *cronhpacontrollerv1.CronHPA) (result *cronhpacontrollerv1.CronHPA, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(cronhpasResource, c.ns, cronHPA), &v1alpha1.CronHPA{})
+		Invokes(testing.NewUpdateAction(cronhpasResource, c.ns, cronHPA), &cronhpacontrollerv1.CronHPA{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.CronHPA), err
+	return obj.(*cronhpacontrollerv1.CronHPA), err
 }
 
 // Delete takes name of the cronHPA and deletes it. Returns an error if one occurs.
 func (c *FakeCronHPAs) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(cronhpasResource, c.ns, name), &v1alpha1.CronHPA{})
+		Invokes(testing.NewDeleteAction(cronhpasResource, c.ns, name), &cronhpacontrollerv1.CronHPA{})
 
 	return err
 }
@@ -112,17 +112,17 @@ func (c *FakeCronHPAs) Delete(name string, options *v1.DeleteOptions) error {
 func (c *FakeCronHPAs) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(cronhpasResource, c.ns, listOptions)
 
-	_, err := c.Fake.Invokes(action, &v1alpha1.CronHPAList{})
+	_, err := c.Fake.Invokes(action, &cronhpacontrollerv1.CronHPAList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched cronHPA.
-func (c *FakeCronHPAs) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.CronHPA, err error) {
+func (c *FakeCronHPAs) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *cronhpacontrollerv1.CronHPA, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(cronhpasResource, c.ns, name, pt, data, subresources...), &v1alpha1.CronHPA{})
+		Invokes(testing.NewPatchSubresourceAction(cronhpasResource, c.ns, name, pt, data, subresources...), &cronhpacontrollerv1.CronHPA{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.CronHPA), err
+	return obj.(*cronhpacontrollerv1.CronHPA), err
 }

@@ -4,7 +4,7 @@ metadata:
   name: cronhpas.gs.io
 spec:
   group: gs.io
-  version: v1alpha1
+  version: v1
   names:
     kind: CronHPA
     listKind: CronHPAList

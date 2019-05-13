@@ -42,7 +42,7 @@ We propose a new CRD `CronHPA` which is inspired by `CronJob` (thanks a lot!) to
 `CronHPA` example:
 
 ```
-apiVersion: gs.io/v1alpha1
+apiVersion: gs.io/v1
 kind: CronHPA
 metadata:
   name: example-cron-hpa
@@ -65,7 +65,7 @@ spec:
 As a game server admin, I find there will be a lot of game players logining to our servers and playing games from Friday 20:00 to Sunday 23:00 every week, I'd better to auto scale game servers at that time. And I will use following `CronHPA` to solve my problem.
 
 ```
-apiVersion: gs.io/v1alpha1
+apiVersion: gs.io/v1
 kind: CronHPA
 metadata:
   name: game-servers-cronhpa
@@ -86,7 +86,7 @@ spec:
 As a web server admin, I find pageviews for my web is high at every day 8:00~9:00 am and 7:00~9:00 pm. And I will use following `CronHPA` to solve my problem.
 
 ```
-apiVersion: gs.io/v1alpha1
+apiVersion: gs.io/v1
 kind: CronHPA
 metadata:
   name: web-servers-cronhpa

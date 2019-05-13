@@ -33,7 +33,7 @@ var CRD = &extensionsobj.CustomResourceDefinition{
 	},
 	Spec: extensionsobj.CustomResourceDefinitionSpec{
 		Group:   "gs.io",
-		Version: "v1alpha1",
+		Version: "v1",
 		Scope:   extensionsobj.ResourceScope("Namespaced"),
 		Names: extensionsobj.CustomResourceDefinitionNames{
 			Plural:   "cronhpas",

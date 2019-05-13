@@ -28,7 +28,7 @@ CODEGEN_PKG=${CODEGEN_PKG:-$(cd ${SCRIPT_ROOT}; ls -d -1 ./vendor/k8s.io/code-ge
 #                  instead of the $GOPATH directly. For normal projects this can be dropped.
 ${CODEGEN_PKG}/generate-groups.sh "deepcopy,client,informer,lister" \
   github.com/hex108/cron-hpa-controller/pkg/client github.com/hex108/cron-hpa-controller/pkg/apis \
-  cronhpacontroller:v1alpha1 \
+  cronhpacontroller:v1 \
   --output-base "$(dirname ${BASH_SOURCE})/../../../../"
 
 # To use your own boilerplate text append:

@@ -6,7 +6,7 @@ Cron Horizontal Pod Autoscaler(CronHPA) enables us to auto scale workloads(those
 `CronHPA` example:
 
 ```
-apiVersion: gs.io/v1alpha1
+apiVersion: gs.io/v1
 kind: CronHPA
 metadata:
   name: example-cron-hpa
