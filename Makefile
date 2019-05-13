@@ -21,4 +21,7 @@ verify-gofmt:
 format:
 	hack/format.sh
 
+image:
+	hack/build-image.sh
+
 #  vim: set ts=2 sw=2 tw=0 noet :

@@ -1,5 +1,4 @@
 .version-defs
 bin/**/*
 go/**/*
-cron-hpa-controller
 /.idea
