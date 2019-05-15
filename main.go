@@ -20,6 +20,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/hex108/cron-hpa-controller/pkg/admission"
 	clientset "github.com/hex108/cron-hpa-controller/pkg/client/clientset/versioned"
 	"github.com/hex108/cron-hpa-controller/pkg/cronhpa"
 	"github.com/hex108/cron-hpa-controller/pkg/logs"
@@ -61,6 +62,15 @@ var (
 		RetryPeriod:   metav1.Duration{Duration: DefaultRetryPeriod},
 		ResourceLock:  resourcelock.EndpointsResourceLock,
 	}
+
+	// Admission related config
+	registerAdmission bool
+	tlsCAfile         string
+	tlsCertFile       string
+	tlsKeyFile        string
+	listenAddress     string
+	// namespace to deploy CronHPA controller
+	namespace string
 )
 
 func main() {
@@ -105,6 +115,17 @@ func main() {
 	run := func(ctx context.Context) {
 		if createCRD {
 			wait.PollUntil(time.Second*5, func() (bool, error) { return cronhpa.EnsureCRDCreated(extensionsClient) }, ctx.Done())
+		}
+
+		if registerAdmission {
+			wait.PollImmediateUntil(time.Second*5, func() (bool, error) {
+				return admission.Register(kubeClient, namespace, tlsCAfile)
+			}, ctx.Done())
+			server, err := admission.NewServer(listenAddress, tlsCertFile, tlsKeyFile)
+			if err != nil {
+				klog.Fatalf("Error new admission server: %v", err)
+			}
+			go server.Run(ctx.Done())
 		}
 
 		if err = controller.Run(ctx.Done()); err != nil {
@@ -156,6 +177,14 @@ func addFlags(fs *pflag.FlagSet) {
 	fs.BoolVar(&createCRD, "create-crd", true, "Create cronhpa CRD if it does not exist")
 	fs.Float32Var(&kubeAPIQPS, "kube-api-qps", kubeAPIQPS, "QPS to use while talking with kubernetes apiserver")
 	fs.IntVar(&kubeAPIBurst, "kube-api-burst", kubeAPIBurst, "Burst to use while talking with kubernetes apiserver")
+
+	// Admission related
+	fs.BoolVar(&registerAdmission, "register-admission", false, "Register admission for CronHPA controller")
+	fs.StringVar(&tlsCAfile, "tlsCAFile", "/etc/certs/ca.crt", "File containing the x509 CA for HTTPS")
+	fs.StringVar(&listenAddress, "listen-address", ":8443", "The address to listen on for HTTP requests.")
+	fs.StringVar(&tlsCertFile, "tlsCertFile", "/etc/certs/tls.crt", "File containing the x509 Certificate for HTTPS.")
+	fs.StringVar(&tlsKeyFile, "tlsKeyFile", "/etc/certs/tls.key", "File containing the x509 private key to for HTTPS.")
+	fs.StringVar(&namespace, "namespace", "kube-system", "Namespace to deploy tapp controller")
 
 	leaderelectionconfig.BindFlags(&leaderElection, fs)
 }

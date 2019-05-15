@@ -297,9 +297,10 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:30dc534f707347e0b0abf615526a94281318dd76b1c9ce2244fa5a6634ae9ba4"
+  digest = "1:f9f1c96d076cd35f09f4fb91e159049f759d8e65e6eb3f07064cb2ce29592b24"
   name = "k8s.io/api"
   packages = [
+    "admission/v1beta1",
     "admissionregistration/v1alpha1",
     "admissionregistration/v1beta1",
     "apps/v1",
@@ -579,6 +580,8 @@
   input-imports = [
     "github.com/robfig/cron",
     "github.com/spf13/pflag",
+    "k8s.io/api/admission/v1beta1",
+    "k8s.io/api/admissionregistration/v1beta1",
     "k8s.io/api/autoscaling/v1",
     "k8s.io/api/autoscaling/v2beta1",
     "k8s.io/api/core/v1",
