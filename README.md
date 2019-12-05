@@ -1,5 +1,7 @@
 # cron-hpa-controller
 
+**Notice: The repo has been moved to https://github.com/tkestack/cron-hpa, and it will be maintained there.**
+
 Cron Horizontal Pod Autoscaler(CronHPA) enables us to auto scale workloads(those support `scale` subresource, e.g. deployment, statefulset) periodically using [crontab](https://en.wikipedia.org/wiki/Cron) scheme.
 
 
